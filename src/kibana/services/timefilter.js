@@ -26,7 +26,7 @@ define(function (require) {
       self.enabled = false;
 
       var timeDefaults = {
-        from: 'now-15m',
+        from: 'now-60d',
         to: 'now'
       };
 
