@@ -8,13 +8,35 @@ define(function (require) {
 
     var metrics = $scope.metrics = [];
 
+    var pad = function (num) {
+      if (num < 10) {
+        return '00' + num.toString();
+      } else if (num < 100) {
+        return '0' + num.toString();
+      } else {
+        return num.toString();
+      }
+    };
+
+    var commaify = function (num) {
+      var result = [];
+      num = parseInt(num, 10);
+      while (num >= 1000) {
+        result.unshift(pad(num % 1000));
+        num = Math.floor(num / 1000);
+      }
+      result.unshift(num);
+      return result.join(',');
+    };
+
     $scope.processTableGroups = function (tableGroups) {
       tableGroups.tables.forEach(function (table) {
         table.columns.forEach(function (column, i) {
           var fieldFormatter = table.aggConfig(column).fieldFormatter();
+          var finalVal = commaify(fieldFormatter(table.rows[0][i]));
           metrics.push({
             label: column.title,
-            value: fieldFormatter(table.rows[0][i])
+            value: finalVal
           });
         });
       });
